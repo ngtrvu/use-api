@@ -6,6 +6,7 @@ node_modules
 .pnp.js
 .turbo
 .next
+dist
 
 # testing
 /coverage

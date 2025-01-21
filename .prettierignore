@@ -1,0 +1,17 @@
+# Ignore everything recursively
+*
+
+# But not the .ts files
+!*.ts
+!*.js
+!*.jsx
+!*.tsx
+
+# Check subdirectories too
+!*/
+
+node_modules
+pnpm-lock.yaml
+.next
+.turbo
+dist

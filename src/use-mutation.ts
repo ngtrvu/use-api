@@ -7,14 +7,18 @@ import { get } from 'lodash'
 interface Options
   extends UseMutationOptions<unknown, unknown, unknown, unknown> {
   resourceName?: string
+  onStreaming?: (chunk: unknown) => void
 }
 
 interface ApiCall {
-  queryFn: (params: unknown) => Promise<unknown>
+  queryFn: (
+    params: unknown,
+    onStreaming?: (chunk: unknown) => void,
+  ) => Promise<unknown>
 }
 
 const useMutation = (apiCall: ApiCall, options: Options = {}) => {
-  const { resourceName, ...others } = options
+  const { resourceName, onStreaming, ...others } = options
 
   const {
     mutate,
@@ -24,7 +28,7 @@ const useMutation = (apiCall: ApiCall, options: Options = {}) => {
     error,
     ...props
   } = useMutationBase({
-    mutationFn: apiCall.queryFn,
+    mutationFn: (params: unknown) => apiCall.queryFn(params, onStreaming),
     ...others,
   })
 

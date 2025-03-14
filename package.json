@@ -1,7 +1,7 @@
 {
   "name": "@ngtrvu/use-api",
   "description": "Hooks & utils for api calls",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "sideEffects": false,
   "license": "MIT",
   "main": "./dist/index.js",

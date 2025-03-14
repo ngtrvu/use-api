@@ -28,7 +28,7 @@ export const apiCall = (
         if (response.response && onStreaming) {
           // Handle streaming data
           const chunks = response.response.split('\n').filter(Boolean)
-          chunks.forEach((chunk) => {
+          chunks.forEach((chunk: any) => {
             try {
               const parsedChunk = JSON.parse(chunk)
               onStreaming(parsedChunk)

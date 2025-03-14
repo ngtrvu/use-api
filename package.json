@@ -18,7 +18,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "publish": "build && npm publish --access public"
+    "release": "rm -rf dist && npm run build && npm publish --access public"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.0.0",

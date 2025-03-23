@@ -1,12 +1,25 @@
 {
   "name": "@ngtrvu/use-api",
   "description": "Hooks & utils for api calls",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "sideEffects": false,
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": ["./dist/index.d.ts"]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "files": [
     "dist/**"
   ],
@@ -17,7 +30,8 @@
     "check-types": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "release": "rm -rf dist && npm run build && npm publish --access public"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.0.0",

@@ -2,6 +2,19 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { useMutation } from './use-mutation'
 
+const streamingChunks = [
+  'f:{"messageId":"msg-YJrhY5pO3exHoJi2CSFCsW3T"}',
+  '0:"Hello"',
+  '0:"!"',
+  '0:"How"',
+  '0:"can"',
+  '0:"I"',
+  '0:"assist"',
+  '0:"you"',
+  '0:"today"',
+  '0:"?"',
+]
+
 describe('useMutation', () => {
   let queryClient: QueryClient
 
@@ -99,7 +112,6 @@ describe('useMutation', () => {
   })
 
   it('should handle streaming data', async () => {
-    const streamingChunks = ['Chunk 1', 'Chunk 2', 'Chunk 3']
     const mockOnStreaming = jest.fn()
     const finalResponse = { status: 'completed' }
 
@@ -137,10 +149,6 @@ describe('useMutation', () => {
   })
 
   it('should handle streaming with JSON chunks', async () => {
-    const streamingChunks = [
-      { type: 'token', content: 'Hello' },
-      { type: 'token', content: 'World' },
-    ]
     const mockOnStreaming = jest.fn()
     const finalResponse = { status: 'completed' }
 
@@ -200,7 +208,6 @@ describe('useMutation', () => {
 
   describe('Streaming functionality', () => {
     it('should handle streaming with delay between chunks', async () => {
-      const streamingChunks = ['Chunk 1', 'Chunk 2', 'Chunk 3']
       const mockOnStreaming = jest.fn()
       const finalResponse = { status: 'completed' }
 
@@ -265,7 +272,7 @@ describe('useMutation', () => {
     })
 
     it('should handle streaming with different data types', async () => {
-      const streamingChunks = [
+      const streamingChunksWithDifferentDataTypes = [
         { type: 'text', content: 'Hello' },
         123,
         true,
@@ -277,7 +284,7 @@ describe('useMutation', () => {
 
       const mockApiCall = {
         queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
-          streamingChunks.forEach((chunk) => {
+          streamingChunksWithDifferentDataTypes.forEach((chunk) => {
             onStreaming?.(chunk)
           })
           return finalResponse

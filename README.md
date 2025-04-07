@@ -1,15 +1,16 @@
 # @ngtrvu/use-api
 
-A powerful React hooks library for handling API calls with streaming support, built on top of React Query and Axios.
+A powerful React hooks library for handling API calls with streaming support, built on top of React Query and Fetch API.
 
 ## Features
 
-- 🚀 Built on React Query and Axios
+- 🚀 Built on React Query and Fetch API
 - 📡 Streaming support for real-time data
 - 🎯 Type-safe API calls
 - 🔄 Automatic retries and caching
 - 🎨 Clean and simple API
 - 📦 Reusable API definitions
+- 🌐 Native browser APIs
 
 ## Installation
 
@@ -230,10 +231,7 @@ export const uploadApi = {
       endpoint: UPLOAD_ENDPOINTS.FILE,
       method: 'POST',
       body: formData,
-      streaming: true,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+      streaming: true
     }
   }),
 
@@ -245,10 +243,7 @@ export const uploadApi = {
       endpoint: UPLOAD_ENDPOINTS.IMAGE,
       method: 'POST',
       body: formData,
-      streaming: true,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+      streaming: true
     }
   })
 }
@@ -314,7 +309,6 @@ export interface UpdateAccountPayload {
 }
 
 // api/account/index.ts
-import appApiAxios from '@/utils/app-api-axios'
 import { apiCall } from '@ngtrvu/use-api'
 import { ACCOUNT_ACTIONS } from './constants'
 import type { Account, UpdateAccountPayload } from './types'
@@ -325,8 +319,7 @@ export const accountApi = {
     () => ({
       endpoint: `/api/account`,
       method: 'GET',
-    }),
-    appApiAxios
+    })
   ),
 
   update: apiCall<UpdateAccountPayload, Account>(
@@ -335,8 +328,7 @@ export const accountApi = {
       endpoint: `/api/account`,
       method: 'PATCH',
       body: payload,
-    }),
-    appApiAxios
+    })
   )
 }
 
@@ -353,49 +345,24 @@ const AccountSettings = () => {
 }
 ```
 
-### Custom Axios Instance
+### Custom Fetch Configuration
 
 ```typescript
-// utils/app-api-axios.ts
-import axios from 'axios'
+// utils/fetch-config.ts
+const defaultHeaders = {
+  'Content-Type': 'application/json'
+}
 
-const appApiAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 30000,
-  headers: {
-    'Content-Type': 'application/json'
+export const createFetchConfig = (token?: string) => {
+  const headers = { ...defaultHeaders }
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
   }
-})
-
-// Add request interceptor
-appApiAxios.interceptors.request.use(
-  (config) => {
-    // Add auth token
-    const token = localStorage.getItem('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => Promise.reject(error)
-)
-
-// Add response interceptor
-appApiAxios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Handle common errors
-    if (error.response?.status === 401) {
-      // Handle unauthorized
-    }
-    return Promise.reject(error)
-  }
-)
-
-export default appApiAxios
+  return { headers }
+}
 
 // api/base.ts
-import appApiAxios from '@/utils/app-api-axios'
+import { createFetchConfig } from '@/utils/fetch-config'
 import { apiCall } from '@ngtrvu/use-api'
 
 export const createApiCall = <P = void, R = unknown>(
@@ -407,7 +374,7 @@ export const createApiCall = <P = void, R = unknown>(
     streaming?: boolean
   }
 ) => {
-  return apiCall<P, R>(action, configFn, appApiAxios)
+  return apiCall<P, R>(action, configFn)
 }
 
 // api/account/index.ts - Using createApiCall

@@ -1,43 +1,50 @@
-import { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { setupAxios } from './enhanced-axios'
-
 interface ApiOptions {
   endpoint: string
   method: string
   body?: any
   streaming?: boolean
+  headers?: Record<string, string>
 }
 
-export const apiCall = (
-  apiName: string,
-  fn: Function,
-  axios?: AxiosInstance,
-) => {
+export const apiCall = (apiName: string, fn: Function) => {
   const call = async (params: any, onStreaming?: (chunk: any) => void) => {
     const options: ApiOptions = fn(params)
-    const axiosOptions: AxiosRequestConfig = {
-      url: options.endpoint,
+    const fetchOptions: RequestInit = {
       method: options.method,
-      data: options.body,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    }
+
+    if (options.body) {
+      fetchOptions.body = JSON.stringify(options.body)
     }
 
     if (options.streaming) {
-      axiosOptions.responseType = 'stream'
-      axiosOptions.onDownloadProgress = (progressEvent) => {
-        const response = progressEvent.event.target as XMLHttpRequest
-        if (response && onStreaming) {
-          // Handle streaming data, keep the original data type
-          onStreaming(response)
+      const response = await fetch(options.endpoint, fetchOptions)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      if (response.body && onStreaming) {
+        const reader = response.body.getReader()
+
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          onStreaming(value)
         }
+        return
       }
     }
 
-    if (axios) {
-      return axios(axiosOptions)
+    const response = await fetch(options.endpoint, fetchOptions)
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
     }
-
-    axios = setupAxios()
-    return axios(axiosOptions)
+    return response.json()
   }
 
   return {

@@ -304,8 +304,10 @@ describe('useMutation', () => {
         expect(result.current.isPending).toBe(false)
       })
 
-      expect(mockOnStreaming).toHaveBeenCalledTimes(streamingChunks.length)
-      streamingChunks.forEach((chunk, index) => {
+      expect(mockOnStreaming).toHaveBeenCalledTimes(
+        streamingChunksWithDifferentDataTypes.length,
+      )
+      streamingChunksWithDifferentDataTypes.forEach((chunk, index) => {
         expect(mockOnStreaming).toHaveBeenNthCalledWith(index + 1, chunk)
       })
     })

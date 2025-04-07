@@ -3,6 +3,7 @@ interface ApiOptions {
   method: string
   body?: any
   streaming?: boolean
+  headers?: Record<string, string>
 }
 
 export const apiCall = (apiName: string, fn: Function) => {
@@ -12,6 +13,7 @@ export const apiCall = (apiName: string, fn: Function) => {
       method: options.method,
       headers: {
         'Content-Type': 'application/json',
+        ...options.headers,
       },
     }
 

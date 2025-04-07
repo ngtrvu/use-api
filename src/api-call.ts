@@ -24,7 +24,7 @@ export const apiCall = (
     if (options.streaming) {
       axiosOptions.responseType = 'stream'
       axiosOptions.onDownloadProgress = (progressEvent) => {
-        const { response } = progressEvent.event.target as XMLHttpRequest
+        const response = progressEvent.event.target as XMLHttpRequest
         if (response && onStreaming) {
           // Handle streaming data, keep the original data type
           onStreaming(response)

@@ -18,7 +18,11 @@ export const apiCall = (apiName: string, fn: Function) => {
     }
 
     if (options.body) {
-      fetchOptions.body = JSON.stringify(options.body)
+      // Don't stringify if it's FormData
+      fetchOptions.body =
+        options.body instanceof FormData
+          ? options.body
+          : JSON.stringify(options.body)
     }
 
     if (options.streaming) {
@@ -27,7 +31,11 @@ export const apiCall = (apiName: string, fn: Function) => {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
-      if (response.body && onStreaming) {
+      if (!response.body) {
+        throw new Error('Streaming response has no body')
+      }
+
+      if (onStreaming) {
         const reader = response.body.getReader()
 
         while (true) {
@@ -38,6 +46,8 @@ export const apiCall = (apiName: string, fn: Function) => {
         }
         return
       }
+
+      throw new Error('Streaming response requires onStreaming callback')
     }
 
     const response = await fetch(options.endpoint, fetchOptions)

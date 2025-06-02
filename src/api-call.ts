@@ -1,3 +1,5 @@
+import { ApiCall } from './types'
+
 interface ApiOptions {
   endpoint: string
   method: string
@@ -6,7 +8,7 @@ interface ApiOptions {
   headers?: Record<string, string>
 }
 
-export const apiCall = (apiName: string, fn: Function) => {
+export const apiCall = (apiName: string, fn: Function): ApiCall => {
   const call = async (params: any, onStreaming?: (chunk: any) => void) => {
     const options: ApiOptions = fn(params)
     const fetchOptions: RequestInit = {
@@ -58,7 +60,7 @@ export const apiCall = (apiName: string, fn: Function) => {
   }
 
   return {
-    queryKey: apiName,
+    apiName: apiName,
     queryFn: call,
-  }
+  } as ApiCall
 }

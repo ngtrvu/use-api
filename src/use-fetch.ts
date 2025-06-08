@@ -1,14 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { get, isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
+import { ApiCall, Options } from './types'
 
-type Options = {
-  resourceName?: string
-  autoLoad?: boolean
-  initialParams?: Record<string, any>
-}
-
-export const useFetch = (apiCall: any, options: Options) => {
+export const useFetch = (apiCall: ApiCall, options: Options) => {
   const {
     resourceName,
     autoLoad = true,
@@ -27,7 +22,7 @@ export const useFetch = (apiCall: any, options: Options) => {
     isRefetching,
     ...props
   } = useQuery({
-    queryKey: [apiCall.queryKey, params],
+    queryKey: [apiCall.apiName, params],
     queryFn: () => apiCall.queryFn(params),
     enabled: autoLoad, // autoload by default
     ...others,

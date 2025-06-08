@@ -3,18 +3,12 @@ import {
   UseMutationOptions,
 } from '@tanstack/react-query'
 import { get } from 'lodash'
+import { ApiCall } from './types'
 
 interface Options
   extends UseMutationOptions<unknown, unknown, unknown, unknown> {
   resourceName?: string
   onStreaming?: (chunk: unknown) => void
-}
-
-interface ApiCall {
-  queryFn: (
-    params: unknown,
-    onStreaming?: (chunk: unknown) => void,
-  ) => Promise<unknown>
 }
 
 const useMutation = (apiCall: ApiCall, options: Options = {}) => {
@@ -28,7 +22,8 @@ const useMutation = (apiCall: ApiCall, options: Options = {}) => {
     error,
     ...props
   } = useMutationBase({
-    mutationFn: (params: unknown) => apiCall.queryFn(params, onStreaming),
+    mutationFn: (params: Record<string, any>) =>
+      apiCall.queryFn(params, onStreaming),
     ...others,
   })
 

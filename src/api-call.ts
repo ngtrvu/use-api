@@ -8,15 +8,17 @@ interface ApiOptions {
   headers?: Record<string, string>
 }
 
+const defaultHeaders = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+}
+
 export const apiCall = (apiName: string, fn: Function): ApiCall => {
   const call = async (params: any, onStreaming?: (chunk: any) => void) => {
     const options: ApiOptions = fn(params)
     const fetchOptions: RequestInit = {
       method: options.method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers: options.headers ? options.headers : defaultHeaders,
     }
 
     if (options.body) {

@@ -2,8 +2,10 @@ import {
   useMutation as useMutationBase,
   UseMutationOptions,
 } from '@tanstack/react-query'
-import { get } from 'lodash'
+import lodash from 'lodash'
 import { ApiCall } from './types'
+
+const { get } = lodash
 
 interface Options
   extends UseMutationOptions<unknown, unknown, unknown, unknown> {

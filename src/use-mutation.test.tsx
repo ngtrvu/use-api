@@ -40,6 +40,7 @@ describe('useMutation', () => {
   it('should handle successful mutation', async () => {
     const mockData = { id: 1, name: 'Test' }
     const mockApiCall = {
+      apiName: 'test',
       queryFn: jest.fn().mockResolvedValue(mockData),
     }
 
@@ -69,6 +70,7 @@ describe('useMutation', () => {
   it('should handle mutation with resourceName', async () => {
     const mockResponse = { data: { user: { id: 1, name: 'Test' } } }
     const mockApiCall = {
+      apiName: 'test',
       queryFn: jest.fn().mockResolvedValue(mockResponse),
     }
 
@@ -92,6 +94,7 @@ describe('useMutation', () => {
   it('should handle mutation error', async () => {
     const mockError = new Error('API Error')
     const mockApiCall = {
+      apiName: 'test',
       queryFn: jest.fn().mockRejectedValue(mockError),
     }
 
@@ -116,6 +119,7 @@ describe('useMutation', () => {
     const finalResponse = { status: 'completed' }
 
     const mockApiCall = {
+      apiName: 'test',
       queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
         // Simulate streaming chunks
         streamingChunks.forEach((chunk) => {
@@ -153,6 +157,7 @@ describe('useMutation', () => {
     const finalResponse = { status: 'completed' }
 
     const mockApiCall = {
+      apiName: 'test',
       queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
         streamingChunks.forEach((chunk) => {
           onStreaming?.(chunk)
@@ -186,6 +191,7 @@ describe('useMutation', () => {
   it('should handle async mutation with mutateAsync', async () => {
     const mockData = { id: 1, name: 'Test' }
     const mockApiCall = {
+      apiName: 'test',
       queryFn: jest.fn().mockResolvedValue(mockData),
     }
 
@@ -212,6 +218,7 @@ describe('useMutation', () => {
       const finalResponse = { status: 'completed' }
 
       const mockApiCall = {
+        apiName: 'test',
         queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
           // Simulate streaming with delays
           for (const chunk of streamingChunks) {
@@ -246,6 +253,7 @@ describe('useMutation', () => {
       const mockOnStreaming = jest.fn()
 
       const mockApiCall = {
+        apiName: 'test',
         queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
           onStreaming?.('Chunk 1')
           onStreaming?.('Chunk 2')
@@ -283,6 +291,7 @@ describe('useMutation', () => {
       const finalResponse = { status: 'completed' }
 
       const mockApiCall = {
+        apiName: 'test',
         queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
           streamingChunksWithDifferentDataTypes.forEach((chunk) => {
             onStreaming?.(chunk)
@@ -317,6 +326,7 @@ describe('useMutation', () => {
       const mockOnStreaming2 = jest.fn()
 
       const createMockApiCall = (chunks: string[]) => ({
+        apiName: 'test',
         queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
           chunks.forEach((chunk) => {
             onStreaming?.(chunk)
@@ -363,6 +373,7 @@ describe('useMutation', () => {
       const minDelay = 50 // ms between chunks
 
       const mockApiCall = {
+        apiName: 'test',
         queryFn: jest.fn().mockImplementation(async (params, onStreaming) => {
           for (const chunk of chunks) {
             const now = Date.now()

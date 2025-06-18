@@ -15,10 +15,11 @@ module.exports = {
       'ts-jest',
       {
         tsconfig: 'tsconfig.jest.json',
+        isolatedModules: true,
       },
     ],
   },
-  testMatch: ['**/*.test.ts', '**/*.test.tsx'],
+  testMatch: ['**/*.test.ts', '**/*.test.tsx', '**/*.test.mjs', '**/*.test.js'],
   coveragePathIgnorePatterns: ['/node_modules/', '/__mocks__/'],
   moduleDirectories: ['node_modules', 'src'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
@@ -29,10 +30,4 @@ module.exports = {
     '!src/**/*.stories.{ts,tsx}',
     '!src/**/*.test.{ts,tsx}',
   ],
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.jest.json',
-      isolatedModules: true,
-    },
-  },
 }

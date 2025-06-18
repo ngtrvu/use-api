@@ -21,6 +21,9 @@ describe('apiCall', () => {
       const testApi = apiCall('test', () => ({
         endpoint: '/api/test',
         method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }))
 
       const result = await testApi.queryFn({})
@@ -45,6 +48,9 @@ describe('apiCall', () => {
         endpoint: '/api/test',
         method: 'POST',
         body: requestBody,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }))
 
       const result = await testApi.queryFn({})

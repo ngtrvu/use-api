@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { get, isEmpty } from 'lodash'
+import lodash from 'lodash'
 import { useEffect, useState } from 'react'
 import { ApiCall, Options } from './types'
+
+const { get, isEmpty } = lodash
 
 export const useFetch = (apiCall: ApiCall, options: Options) => {
   const {

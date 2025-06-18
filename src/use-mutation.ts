@@ -6,6 +6,7 @@ import lodash from 'lodash'
 import { ApiCall } from './types'
 
 const { get } = lodash
+
 interface Options
   extends UseMutationOptions<unknown, unknown, unknown, unknown> {
   resourceName?: string

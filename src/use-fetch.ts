@@ -50,6 +50,8 @@ export const useFetch = (apiCall: ApiCall, options: Options) => {
     refresh: refetch,
     refreshing: isRefetching,
     error,
+    setParams,
+    setDelay,
     ...props,
   }
 }

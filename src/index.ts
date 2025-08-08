@@ -1,3 +1,4 @@
+export { useQueryClient } from '@tanstack/react-query'
 export * from './api-call'
 export * from './query-client-provider'
 export * from './use-fetch'

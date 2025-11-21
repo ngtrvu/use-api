@@ -1,7 +1,7 @@
 {
   "name": "@ngtrvu/use-api",
   "description": "Hooks & utils for api calls",
-  "version": "1.1.7",
+  "version": "1.1.11",
   "sideEffects": false,
   "license": "MIT",
   "main": "./dist/index.js",
@@ -20,6 +20,12 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./react-query": {
+      "types": "./dist/react-query/index.d.ts",
+      "import": "./dist/react-query/index.mjs",
+      "require": "./dist/react-query/index.js",
+      "default": "./dist/react-query/index.js"
     }
   },
   "files": [

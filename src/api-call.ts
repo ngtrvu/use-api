@@ -32,7 +32,11 @@ export const apiCall = (apiName: string, fn: Function): ApiCall => {
     if (options.streaming) {
       const response = await fetch(options.endpoint, fetchOptions)
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        const errorData = await response.json().catch(() => ({}))
+        const error: any = new Error(`HTTP error! status: ${response.status}`)
+        error.status = response.status
+        error.data = errorData
+        throw error
       }
 
       if (!response.body) {
@@ -56,7 +60,11 @@ export const apiCall = (apiName: string, fn: Function): ApiCall => {
 
     const response = await fetch(options.endpoint, fetchOptions)
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      const errorData = await response.json().catch(() => ({}))
+      const error: any = new Error(`HTTP error! status: ${response.status}`)
+      error.status = response.status
+      error.data = errorData
+      throw error
     }
     return response.json()
   }

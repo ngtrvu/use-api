@@ -8,6 +8,12 @@ interface ApiOptions {
   headers?: Record<string, string>
 }
 
+// create custom Error response type
+interface ApiError extends Error {
+  status?: number
+  data?: any
+}
+
 const defaultHeaders = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -33,9 +39,11 @@ export const apiCall = (apiName: string, fn: Function): ApiCall => {
       const response = await fetch(options.endpoint, fetchOptions)
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
-        const error: any = new Error(`HTTP error! status: ${response.status}`)
+        const error: ApiError = new Error(
+          `HTTP response error: ${response.status}`,
+        ) as ApiError
         error.status = response.status
-        error.data = errorData
+        error.data = errorData as any
         throw error
       }
 
@@ -61,9 +69,11 @@ export const apiCall = (apiName: string, fn: Function): ApiCall => {
     const response = await fetch(options.endpoint, fetchOptions)
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      const error: any = new Error(`HTTP error! status: ${response.status}`)
+      const error: ApiError = new Error(
+        `HTTP response error: ${response.status}`,
+      ) as ApiError
       error.status = response.status
-      error.data = errorData
+      error.data = errorData as any
       throw error
     }
     return response.json()

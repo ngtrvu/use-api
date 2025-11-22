@@ -1,6 +1,6 @@
 import { ApiCall } from './types'
 
-interface ApiOptions {
+export interface ApiOptions {
   endpoint: string
   method: string
   body?: any
@@ -9,8 +9,9 @@ interface ApiOptions {
 }
 
 // create custom Error response type
-interface ApiError extends Error {
+export interface ApiError extends Error {
   status?: number
+  statusText?: string
   data?: any
 }
 
@@ -38,11 +39,15 @@ export const apiCall = (apiName: string, fn: Function): ApiCall => {
     if (options.streaming) {
       const response = await fetch(options.endpoint, fetchOptions)
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
         const error: ApiError = new Error(
           `HTTP response error: ${response.status}`,
         ) as ApiError
+
         error.status = response.status
+        error.statusText = response.statusText
+
+        // get the error data
+        const errorData = await response.json().catch(() => ({}))
         error.data = errorData as any
         throw error
       }
@@ -68,14 +73,20 @@ export const apiCall = (apiName: string, fn: Function): ApiCall => {
 
     const response = await fetch(options.endpoint, fetchOptions)
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
       const error: ApiError = new Error(
         `HTTP response error: ${response.status}`,
       ) as ApiError
+
       error.status = response.status
+      error.statusText = response.statusText
+
+      // check if the response can be parsed as json()
+      const errorData = await response.json().catch(() => ({}))
       error.data = errorData as any
+
       throw error
     }
+
     return response.json()
   }
 

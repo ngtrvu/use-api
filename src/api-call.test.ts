@@ -1,5 +1,5 @@
 import { TextDecoder, TextEncoder } from 'util'
-import { apiCall } from './api-call'
+import { apiCall, ApiError } from './api-call'
 
 // Mock fetch
 const mockFetch = jest.fn()
@@ -15,6 +15,8 @@ describe('apiCall', () => {
       const mockResponse = { data: 'test' }
       mockFetch.mockResolvedValueOnce({
         ok: true,
+        status: 200,
+        statusText: 'OK',
         json: () => Promise.resolve(mockResponse),
       })
 
@@ -41,6 +43,7 @@ describe('apiCall', () => {
       const requestBody = { name: 'test' }
       mockFetch.mockResolvedValueOnce({
         ok: true,
+        status: 200,
         json: () => Promise.resolve(mockResponse),
       })
 
@@ -137,6 +140,10 @@ describe('apiCall', () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 404,
+        statusText: 'Not found',
+
+        // json exception
+        json: () => Promise.reject(new Error('JSON parsing error')),
       })
 
       const testApi = apiCall('test', () => ({
@@ -144,9 +151,39 @@ describe('apiCall', () => {
         method: 'GET',
       }))
 
-      await expect(testApi.queryFn({})).rejects.toThrow(
-        'HTTP error! status: 404',
-      )
+      const response = testApi.queryFn({})
+      await expect(response).rejects.toThrow('HTTP response error: 404')
+      response.catch((error: ApiError) => {
+        expect(error.status).toEqual(404)
+        expect(error.statusText).toEqual('Not found')
+        // expect(error.data).rejects.toThrow('JSON parsing error')
+      })
+    })
+
+    it('should throw error for non-OK responses with json data', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 400,
+        json: () =>
+          Promise.resolve({ error: 'bad_request', message: 'Bad Request' }),
+      })
+
+      const testApi = apiCall('test', () => ({
+        endpoint: '/api/bad-request',
+        method: 'GET',
+      }))
+
+      const response = testApi.queryFn({})
+      await expect(response).rejects.toThrow('HTTP response error: 400')
+      response.catch((error: ApiError) => {
+        // veirfy the error data
+        expect(error.data).toEqual({
+          error: 'bad_request',
+          message: 'Bad Request',
+        })
+        expect(error.status).toEqual(400)
+        expect(error.statusText).toBeUndefined()
+      })
     })
 
     it('should throw error for streaming responses when no onStreaming callback is provided', async () => {

@@ -1,7 +1,7 @@
 {
   "name": "@ngtrvu/use-api",
   "description": "Hooks & utils for api calls",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "sideEffects": false,
   "license": "MIT",
   "main": "./dist/index.js",
@@ -47,30 +47,38 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@tanstack/react-query": "^5.61.0",
-    "@testing-library/jest-dom": "^6.1.4",
-    "@testing-library/react": "^14.1.2",
+    "@tanstack/react-query": "^5.107.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^14.3.1",
     "@testing-library/react-hooks": "^8.0.1",
-    "@types/jest": "^29.5.8",
-    "@types/lodash": "^4.17.13",
-    "@types/ms": "^0.7.31",
-    "@types/node": "^18.11.9",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
+    "@types/jest": "^29.5.14",
+    "@types/lodash": "^4.17.27",
+    "@types/ms": "^0.7.34",
+    "@types/node": "^18.19.130",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^30.0.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "ts-jest": "^29.4.0",
-    "tsup": "^8.4.0",
-    "typescript": "^5.1.6"
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "ts-jest": "^29.4.15",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "chrono-node": "^2.7.5",
+    "chrono-node": "^2.10.3",
     "clsx": "^2.1.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "ms": "^2.1.3"
   },
-  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
+  "pnpm": {
+    "overrides": {
+      "postcss": "^8.5.23",
+      "esbuild": "^0.28.1",
+      "glob@>=9 <14.0.2": "^14.0.2",
+      "minimatch@>=7 <11.0.1": "^11.0.1"
+    }
+  }
 }
